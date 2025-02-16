@@ -89,7 +89,7 @@ login_radiko() {
       --data-urlencode "mail=${mail}" \
       --data-urlencode "pass=${password}" \
       --output - \
-      "https://radiko.jp/v4/api/member/login")
+      "https://radiko.jp/ap/member/webapi/member/login")
 
   # Extract login result
   radiko_session=$(echo "${login_json}" | jq -r ".radiko_session")
@@ -217,7 +217,7 @@ get_hls_uri_radiko() {
     areafree="1"
   fi
 
-  curl --silent "https://radiko.jp/v2/station/stream_smh_multi/${station_id}.xml" | xmllint --xpath "/urls/url[@areafree='${areafree}'][1]/playlist_create_url/text()" - 2> /dev/null
+  curl --silent "https://radiko.jp/v3/station/stream/aHybrid01/${station_id}.xml" | xmllint --xpath "/urls/url[@timefree='0' and @areafree='${areafree}'][1]/playlist_create_url/text()" - | sed 's/\&amp;/\&/g' 2> /dev/null
 }
 
 #######################################
